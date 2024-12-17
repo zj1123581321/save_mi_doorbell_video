@@ -8,6 +8,7 @@ import time
 import json
 import os
 import logging
+import requests
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -25,14 +26,15 @@ def check_and_download():
 
         # 获取米家设备列表
         device_list = cloud.get_device_list()
+        print(device_list)
         _LOGGER.info('共获取到%d个设备', len(device_list))
 
         # 匹配智能门铃设备
-        _LOGGER.info('正在自动匹配智能门铃设备...')
+        _LOGGER.info('正在自动匹配智能门铃设备...，门铃设备名称为：%s', conf.door_name)
         device = None
         for d in device_list:
             # 自动匹配设备类型
-            if d['model'].startswith('madv.cateye.'):
+            if d['model'].startswith('madv.cateye.') and d['name'] == conf.door_name:
                 device = d
                 break
 

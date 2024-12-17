@@ -9,9 +9,11 @@ class Config(NamedTuple):
     schedule_minutes: int
     ffmpeg: str
     merge: bool
+    door_name: str
+    wechat_webhook: str
 
 
 def from_file(path='config.json') -> Config:
-    with open(path, 'r') as f:
+    with open(path, 'r',encoding='utf-8') as f:
         config = json.load(f)
         return Config(**config)
