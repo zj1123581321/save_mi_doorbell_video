@@ -15,7 +15,9 @@
   "save_path": "存储视频的路径",
   "schedule_minutes": 多少分钟运行一次,
   "ffmpeg": "ffmpeg的全路径",
-  "merge": 是否合并视频true/false
+  "merge": 是否合并视频true/false,
+  "door_name":"要存储的门铃在米家中的名字，主要用于多个门铃中固定目标",
+  "wechat_webhook":"企微机器人地址，如果报错会通知"
 }
 ```
 
