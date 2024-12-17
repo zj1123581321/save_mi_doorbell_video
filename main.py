@@ -10,11 +10,54 @@ import os
 import logging
 import requests
 
+class WeChatWebhookHandler(logging.Handler):
+    def __init__(self):
+        super().__init__()
+        self.webhook_url = conf.wechat_webhook
+        
+    def emit(self, record):
+        # 仅处理ERROR级别日志
+        if record.levelno >= logging.ERROR:
+            try:
+                # 格式化日志消息
+                msg = self.format(record)
+                
+                # 构造企业微信消息
+                data = {
+                    "msgtype": "text",
+                    "text": {
+                        "content": f"[ERROR]门铃存档机器人\n{msg}"
+                    }
+                }
+                
+                # 发送webhook请求
+                response = requests.post(
+                    self.webhook_url,
+                    json=data,
+                    timeout=5
+                )
+                response.raise_for_status()
+                
+            except Exception as e:
+                # 发送失败不影响原有日志记录
+                print(f"Failed to send WeChat notification: {str(e)}")
+
+# 基础配置
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+
+# 获取logger
 _LOGGER = logging.getLogger(__name__)
 
-logging.basicConfig(level=logging.INFO,
-                    format='%(asctime)s %(levelname)s %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
+conf = config.from_file()
+
+# 添加企业微信webhook handler
+wechat_handler = WeChatWebhookHandler()
+wechat_handler.setLevel(logging.ERROR)  # 只处理ERROR级别
+_LOGGER.addHandler(wechat_handler)
 
 
 def check_and_download():
@@ -79,7 +122,12 @@ def check_and_download():
 
 
 if __name__ == '__main__':
-    conf = config.from_file()
+    # # 普通info日志,不会发送企业微信通知
+    # _LOGGER.info("This is an info message")
+
+    # # error日志会同时记录日志并发送企业微信通知
+    # _LOGGER.error("This is an error message")
+
 
     # 检查并下载视频
     check_and_download()
