@@ -1,0 +1,10 @@
+{
+    "username": "your_phone_number",
+    "password": "your_password",
+    "save_path": "./video",
+    "ffmpeg": "C:/Path/To/Your/ffmpeg.exe",
+    "schedule_minutes": 60,
+    "merge": true,
+    "door_names": ["门铃设备1", "门铃设备2"],
+    "wechat_webhook": "https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=your_webhook_key"
+} 
