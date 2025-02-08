@@ -5,3 +5,4 @@ __pycache__
 video
 *.pyc
 config.json
+devices_*.json
